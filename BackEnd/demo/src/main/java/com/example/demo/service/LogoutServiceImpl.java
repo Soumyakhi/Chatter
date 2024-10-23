@@ -11,9 +11,7 @@ public class LogoutServiceImpl implements LogoutService {
     @Autowired
     private JwtUtil jwtUtil;
     public void logoutService(HttpServletRequest request){
-        String requestHeader = request.getHeader("Authorization");
-        String token=requestHeader.substring(7);
-        String uid=jwtUtil.extractUserId(token);
+        String uid=String.valueOf(jwtUtil.extractUserIdFromRequest(request));
         jwtUtil.removeToken(uid);
     }
 }

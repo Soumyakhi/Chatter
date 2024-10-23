@@ -17,9 +17,7 @@ public class CheckCreatorServiceImpl implements CheckCreatorService {
     JwtUtil jwtUtil;
     @Override
     public boolean isCreator(HttpServletRequest request, long groupId){
-        String requestHeader = request.getHeader("Authorization");
-        String token=requestHeader.substring(7);
-        long uid=Long.parseLong(jwtUtil.extractUserId(token));
+        long uid=jwtUtil.extractUserIdFromRequest(request);
         GroupsEntity groupsEntity=groupRepo.findByGroupid(groupId);
         if(groupsEntity==null){
             return false;

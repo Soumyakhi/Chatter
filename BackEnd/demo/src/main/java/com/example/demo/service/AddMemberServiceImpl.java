@@ -26,9 +26,7 @@ public class AddMemberServiceImpl implements AddMemberService {
     private MemberRepo memberRepo;
     @Override
     public boolean addMember(HttpServletRequest request, @RequestBody MemberDTO memberDTO){
-        String requestHeader = request.getHeader("Authorization");
-        String token=requestHeader.substring(7);
-        long creatorIdToken=Long.parseLong(jwtUtil.extractUserId(token));
+        long creatorIdToken=jwtUtil.extractUserIdFromRequest(request);
         GroupsEntity group=groupRepo.findByGroupid(memberDTO.getGroupid());
         UserEntity member=userRepo.findByUid(memberDTO.getUid());
         if(group==null || creatorIdToken!=group.getCreator().getUid() || member==null || memberRepo.findByMemberAndGroupsEntity(member,group)!=null){

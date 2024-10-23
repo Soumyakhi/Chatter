@@ -25,9 +25,7 @@ public class CreateGroupServiceImpl implements CreateGroupService {
         if(groupRepo.findByGroupname(groupsEntity.getGroupname())!=null){
             return  false;
         }
-        String requestHeader = request.getHeader("Authorization");
-        String token=requestHeader.substring(7);
-        UserEntity userEntity=userRepo.findByUid(Long.parseLong(jwtUtil.extractUserId(token)));
+        UserEntity userEntity=userRepo.findByUid(jwtUtil.extractUserIdFromRequest(request));
         groupsEntity.setCreator(userEntity);
         groupRepo.save(groupsEntity);
         MemberEntity memberEntity=new MemberEntity();

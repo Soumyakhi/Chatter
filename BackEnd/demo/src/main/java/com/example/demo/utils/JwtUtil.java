@@ -2,6 +2,7 @@ package com.example.demo.utils;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
@@ -47,5 +48,10 @@ public class JwtUtil {
     }
     public void removeToken(String userId){
         validTokens.remove(userId);
+    }
+    public long extractUserIdFromRequest(HttpServletRequest request) {
+        String requestHeader = request.getHeader("Authorization");
+        String token=requestHeader.substring(7);
+        return Long.parseLong(extractUserId(token));
     }
 }

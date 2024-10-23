@@ -1,8 +1,8 @@
 package com.example.demo.Controller;
 
 import com.example.demo.entity.UserEntity;
-import com.example.demo.service.*;
-import com.example.demo.utils.JwtUtil;
+import com.example.demo.serviceInterface.LoginService;
+import com.example.demo.serviceInterface.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class AuthController {
     }
     @PostMapping("/signUp")
     public ResponseEntity<String> signUp(@RequestBody UserEntity userEntity) {
-        int code=registerService.register(userEntity);
+        int code= registerService.register(userEntity);
         if(code==200){
             return new ResponseEntity<>("Signup Successful", HttpStatus.OK);
         }

@@ -5,13 +5,13 @@ import com.example.demo.entity.UserEntity;
 import com.example.demo.repo.GroupRepo;
 import com.example.demo.repo.MemberRepo;
 import com.example.demo.repo.UserRepo;
+import com.example.demo.serviceInterface.CreateGroupService;
 import com.example.demo.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 @Service
-public class CreateGroupService {
+public class CreateGroupServiceImpl implements CreateGroupService {
     @Autowired
     private GroupRepo groupRepo;
     @Autowired
@@ -20,6 +20,7 @@ public class CreateGroupService {
     private JwtUtil jwtUtil;
     @Autowired
     private MemberRepo memberRepo;
+    @Override
     public boolean created(HttpServletRequest request, GroupsEntity groupsEntity){
         if(groupRepo.findByGroupname(groupsEntity.getGroupname())!=null){
             return  false;

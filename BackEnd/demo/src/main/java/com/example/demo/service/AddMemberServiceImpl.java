@@ -7,6 +7,7 @@ import com.example.demo.entity.UserEntity;
 import com.example.demo.repo.GroupRepo;
 import com.example.demo.repo.MemberRepo;
 import com.example.demo.repo.UserRepo;
+import com.example.demo.serviceInterface.AddMemberService;
 import com.example.demo.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
-public class AddMemberService {
+public class AddMemberServiceImpl implements AddMemberService {
     @Autowired
     private GroupRepo groupRepo;
     @Autowired
@@ -23,6 +24,7 @@ public class AddMemberService {
     private JwtUtil jwtUtil;
     @Autowired
     private MemberRepo memberRepo;
+    @Override
     public boolean addMember(HttpServletRequest request, @RequestBody MemberDTO memberDTO){
         String requestHeader = request.getHeader("Authorization");
         String token=requestHeader.substring(7);

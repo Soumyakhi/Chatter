@@ -40,6 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         Collection<GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
         // If a valid token is present, authenticate the request
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try{
             UserEntity userEntity=userRepo.findByUid(Long.parseLong(userId));
 
             if (userEntity!=null && jwtUtil.validateToken(token, userEntity.getUid())) {
@@ -47,6 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userEntity, null, authorities);
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            }}
+            catch (Exception e){
+                System.out.println("invalid");
             }
         }
 

@@ -2,10 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.dto.MemberDTO;
 import com.example.demo.entity.GroupsEntity;
-import com.example.demo.serviceInterface.AddMemberService;
-import com.example.demo.serviceInterface.CheckCreatorService;
-import com.example.demo.serviceInterface.CreateGroupService;
-import com.example.demo.serviceInterface.LogoutService;
+import com.example.demo.serviceInterface.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,6 +55,16 @@ public class FilteredController {
     public ResponseEntity<Object> isCreator(HttpServletRequest request,@RequestParam long groupId){
         boolean isCreator= checkCreatorService.isCreator(request, groupId);
         if(isCreator){
+            return ResponseEntity.status(HttpStatus.OK).body("true");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("false");
+    }
+    @Autowired
+    CheckMemberService checkMemberService;
+    @GetMapping("/isMember/{uid}/{groupid}")
+    public ResponseEntity<Object> isCreator(@PathVariable long uid,@PathVariable long groupid){
+        boolean isMember= checkMemberService.checkIfMember(uid, groupid);
+        if(isMember){
             return ResponseEntity.status(HttpStatus.OK).body("true");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("false");

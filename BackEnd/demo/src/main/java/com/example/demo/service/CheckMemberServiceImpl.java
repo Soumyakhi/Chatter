@@ -17,7 +17,7 @@ public class CheckMemberServiceImpl implements CheckMemberService {
         List<MemberEntity> members=memberRepo.findByGroupsEntity_Groupid(groupId);
         for(MemberEntity memberEntity:members){
             if(memberEntity.getMember().getUid()==uid){
-                return  true;
+                return true;
             }
         }
         return false;

@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.dto.MemberDTO;
 import com.example.demo.entity.GroupsEntity;
+import com.example.demo.entity.UserEntity;
 import com.example.demo.serviceInterface.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @CrossOrigin
 @RequestMapping("/index")
@@ -68,6 +71,12 @@ public class FilteredController {
             return ResponseEntity.status(HttpStatus.OK).body("true");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("false");
+    }
+    @Autowired
+    SearchAddMemberService searchAddMemberService;
+    @GetMapping("/searchNonMembers/{query}/{groupid}")
+    public Set<UserEntity> isCreator(@PathVariable String query, @PathVariable long groupid){
+        return searchAddMemberService.search(query,groupid);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.dto.MemberDTO;
+import com.example.demo.dto.TextDTO;
 import com.example.demo.entity.GroupsEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.serviceInterface.*;
@@ -77,6 +78,16 @@ public class FilteredController {
     @GetMapping("/searchNonMembers/{query}/{groupid}")
     public Set<UserEntity> isCreator(@PathVariable String query, @PathVariable long groupid){
         return searchAddMemberService.search(query,groupid);
+    }
+    @Autowired
+    AddTextService addTextService;
+    @PostMapping("/addText")
+    public ResponseEntity<Object> addText(HttpServletRequest request, @RequestBody TextDTO textDTO){
+        boolean added=addTextService.addText(request,textDTO);
+        if(added){
+            return ResponseEntity.status(HttpStatus.OK).body("text added");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("could not add");
     }
 
 }

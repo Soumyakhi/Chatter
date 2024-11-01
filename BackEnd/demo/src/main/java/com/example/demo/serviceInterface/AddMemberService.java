@@ -5,5 +5,5 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface AddMemberService {
-    public boolean addMember(HttpServletRequest request, @RequestBody MemberDTO memberDTO);
+    public boolean addMember(HttpServletRequest request,MemberDTO memberDTO);
 }

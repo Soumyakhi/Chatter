@@ -1,8 +1,10 @@
 package com.example.demo.Controller;
 
+import com.example.demo.dto.FetchedTextDTO;
 import com.example.demo.dto.MemberDTO;
 import com.example.demo.dto.TextDTO;
 import com.example.demo.entity.GroupsEntity;
+import com.example.demo.entity.TextEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.serviceInterface.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @CrossOrigin
@@ -88,6 +91,12 @@ public class FilteredController {
             return ResponseEntity.status(HttpStatus.OK).body("text added");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("could not add");
+    }
+    @Autowired
+    FetchAllTextService fetchAllTextService;
+    @GetMapping("/fetchAllTexts/{groupid}")
+    public List<FetchedTextDTO> fetchAllTexts(HttpServletRequest request, @PathVariable long groupid){
+        return fetchAllTextService.fetchTexts(request,groupid);
     }
 
 }

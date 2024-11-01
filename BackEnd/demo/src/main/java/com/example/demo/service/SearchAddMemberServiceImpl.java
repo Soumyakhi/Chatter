@@ -35,6 +35,8 @@ public class SearchAddMemberServiceImpl implements SearchAddMemberService {
         for(UserEntity userEntity:userSet){
             MemberEntity memberEntity=memberRepo.findByMemberAndGroupsEntity(userEntity,groupsEntity);
             if(memberEntity==null){
+                userEntity.setPassword("");
+                userEntity.setEmail("");
                 userSetFiltered.add(userEntity);
             }
         }

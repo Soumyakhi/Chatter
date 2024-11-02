@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.dto.FetchGroupsDTO;
 import com.example.demo.dto.FetchedTextDTO;
 import com.example.demo.dto.MemberDTO;
 import com.example.demo.dto.TextDTO;
@@ -97,6 +98,12 @@ public class FilteredController {
     @GetMapping("/fetchAllTexts/{groupid}")
     public List<FetchedTextDTO> fetchAllTexts(HttpServletRequest request, @PathVariable long groupid){
         return fetchAllTextService.fetchTexts(request,groupid);
+    }
+    @Autowired
+    FetchGroupsService fetchGroupsService;
+    @GetMapping("/fetchGroups")
+    public List<FetchGroupsDTO> fetchGroups(HttpServletRequest request){
+        return fetchGroupsService.fetchGroups(request);
     }
 
 }

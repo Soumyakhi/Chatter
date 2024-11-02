@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface TextRepo extends JpaRepository<TextEntity, Long> {
     List<TextEntity> findAllByGroupsEntity_GroupidOrderByTid(long groupId);
+    TextEntity findTopByGroupsEntity_GroupidOrderByTidDesc(long groupId);
+
 }

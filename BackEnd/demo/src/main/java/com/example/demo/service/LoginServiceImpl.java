@@ -16,7 +16,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String doAuthenticate(String email, String password) {
         UserEntity userEntity=userRepo.findByEmailAndPassword(email,password);
-        if(userEntity==null || jwtUtil.isLoggedin(userEntity.getUid().toString())){
+        if(userEntity==null){
             throw new BadCredentialsException("bad credentials");
         }
         Long uid=userEntity.getUid();

@@ -40,12 +40,6 @@ public class JwtUtil {
         String extractedUserId = extractUserId(token);
         return validTokens.containsKey(extractedUserId) && extractedUserId.equals(userId.toString()) && validTokens.get(extractedUserId).equals(token);
     }
-    public boolean isLoggedin(String userId){
-        if(validTokens.containsKey(userId)){
-            return true;
-        }
-        return false;
-    }
     public void removeToken(String userId){
         validTokens.remove(userId);
     }

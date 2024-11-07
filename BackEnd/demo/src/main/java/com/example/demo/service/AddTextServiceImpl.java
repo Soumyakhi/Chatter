@@ -10,6 +10,7 @@ import com.example.demo.repo.UserRepo;
 import com.example.demo.serviceInterface.AddTextService;
 import com.example.demo.serviceInterface.CheckMemberService;
 import com.example.demo.utils.JwtUtil;
+import com.example.demo.utils.MyWebSocketHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,24 +27,29 @@ public class AddTextServiceImpl implements AddTextService {
     CheckMemberService checkMemberService;
     @Autowired
     JwtUtil jwtUtil;
+    @Autowired
+    private MyWebSocketHandler myWebSocketHandler;
     @Override
     public boolean addText(HttpServletRequest request, TextDTO textDTO) {
         long uid=jwtUtil.extractUserIdFromRequest(request);
         boolean isMember=checkMemberService.checkIfMember(uid,textDTO.getGroupid());
-        if(isMember){
-            UserEntity userEntity=userRepo.findByUid(uid);
-            GroupsEntity groupsEntity=groupRepo.findByGroupid(textDTO.getGroupid());
-            TextEntity textEntity=new TextEntity();
+        if (isMember) {
+            UserEntity userEntity = userRepo.findByUid(uid);
+            GroupsEntity groupsEntity = groupRepo.findByGroupid(textDTO.getGroupid());
+            TextEntity textEntity = new TextEntity();
             textEntity.setText(textDTO.getText());
             textEntity.setGroupsEntity(groupsEntity);
             textEntity.setUserEntity(userEntity);
             try {
-                textRepo.save(textEntity);
-            }
-            catch (Exception e){
+                textRepo.save(textEntity);  // Save text to the database
+
+                // Broadcast the text to all WebSocket sessions of the group
+                myWebSocketHandler.sendTextToGroup(textDTO.getGroupid(), textDTO.getText(),textEntity.getUserEntity().getUid());
+            } catch (Exception e) {
+                e.printStackTrace();  // Log error if saving or broadcasting fails
                 return false;
             }
-            return true;
+            return true;  // Return true if text was added successfully
         }
         return false;
     }

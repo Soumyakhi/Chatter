@@ -1,6 +1,10 @@
 package com.example.demo.utils;
 
+import com.example.demo.dto.FetchedTextDTO;
+import com.example.demo.entity.UserEntity;
+import com.example.demo.repo.UserRepo;
 import com.example.demo.serviceInterface.CheckMemberService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -55,7 +59,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         if (groupSessionSet.isEmpty()) groupSessions.remove(groupId);
         System.out.println("User disconnected from group " + groupId);
     }
-
     public void sendTextToGroup(Long groupId, String message) {
         Set<WebSocketSession> groupSessionSet = groupSessions.getOrDefault(groupId, new HashSet<>());
         for (WebSocketSession session : groupSessionSet) {
@@ -68,12 +71,28 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             }
         }
     }
+    @Autowired
+    UserRepo userRepo;
     public void sendTextToGroup(Long groupId, String message,long userId) {
         Set<WebSocketSession> groupSessionSet = groupSessions.getOrDefault(groupId, new HashSet<>());
+        FetchedTextDTO fetchedTextDTO = new FetchedTextDTO();
+        UserEntity userEntity=userRepo.findByUid(userId);
+        fetchedTextDTO.setText(message);
+        fetchedTextDTO.setuId(userId);
+        fetchedTextDTO.setTextId(Integer.MAX_VALUE);
+        fetchedTextDTO.setuName(userEntity.getUserName());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonMessage;
+        try {
+            jsonMessage = objectMapper.writeValueAsString(fetchedTextDTO);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
         for (WebSocketSession session : groupSessionSet) {
             if (session.isOpen()) {
                 try {
-                    session.sendMessage(new TextMessage(userId+","+message));
+                    session.sendMessage(new TextMessage(jsonMessage));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

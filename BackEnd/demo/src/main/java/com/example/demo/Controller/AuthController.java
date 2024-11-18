@@ -21,10 +21,6 @@ public class AuthController {
         LoginInfoDTO loginInfoDTO = loginService.doAuthenticate(userEntity.getEmail(), userEntity.getPassword());;
         return new ResponseEntity<>(loginInfoDTO, HttpStatus.OK);
     }
-    @ExceptionHandler(BadCredentialsException.class)
-    public String exceptionHandler() {
-        return "Credentials Invalid !!";
-    }
     @PostMapping("/signUp")
     public ResponseEntity<String> signUp(@RequestBody UserEntity userEntity) {
         int code= registerService.register(userEntity);

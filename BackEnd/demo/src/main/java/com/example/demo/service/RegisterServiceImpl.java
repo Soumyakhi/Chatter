@@ -11,11 +11,12 @@ public class RegisterServiceImpl implements RegisterService {
     UserRepo userRepo;
     @Override
     public int register(UserEntity userEntity){
-        if(userRepo.findByEmailOrUserName(userEntity.getEmail(),userEntity.getUserName())!=null){
+        UserEntity existingUser1=userRepo.findByEmail(userEntity.getEmail());
+        UserEntity existingUser2=userRepo.findByUserName(userEntity.getUserName());
+        if(existingUser1!=null || existingUser2!=null){
             return 400;
         }
         userRepo.save(userEntity);
-
         return  200;
     }
 

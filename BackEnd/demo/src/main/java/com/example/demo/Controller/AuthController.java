@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.dto.LoginInfoDTO;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.serviceInterface.LoginService;
 import com.example.demo.serviceInterface.RegisterService;
@@ -16,9 +17,9 @@ public class AuthController {
     @Autowired
     private RegisterService registerService;
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserEntity userEntity) {
-        String token = loginService.doAuthenticate(userEntity.getEmail(), userEntity.getPassword());;
-        return new ResponseEntity<>(token, HttpStatus.OK);
+    public ResponseEntity<Object> login(@RequestBody UserEntity userEntity) {
+        LoginInfoDTO loginInfoDTO = loginService.doAuthenticate(userEntity.getEmail(), userEntity.getPassword());;
+        return new ResponseEntity<>(loginInfoDTO, HttpStatus.OK);
     }
     @ExceptionHandler(BadCredentialsException.class)
     public String exceptionHandler() {

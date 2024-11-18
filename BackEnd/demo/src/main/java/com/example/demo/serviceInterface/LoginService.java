@@ -1,6 +1,8 @@
 package com.example.demo.serviceInterface;
 
 
+import com.example.demo.dto.LoginInfoDTO;
+
 public interface LoginService {
-    public String doAuthenticate(String email, String password);
+    public LoginInfoDTO doAuthenticate(String email, String password);
 }

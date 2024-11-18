@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.LoginInfoDTO;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.serviceInterface.LoginService;
 import com.example.demo.utils.JwtUtil;
@@ -14,13 +15,17 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private UserRepo userRepo;
     @Override
-    public String doAuthenticate(String email, String password) {
+    public LoginInfoDTO doAuthenticate(String email, String password) {
         UserEntity userEntity=userRepo.findByEmailAndPassword(email,password);
         if(userEntity==null){
             throw new BadCredentialsException("bad credentials");
         }
+        LoginInfoDTO loginInfoDTO=new LoginInfoDTO();
         Long uid=userEntity.getUid();
-        return this.jwtUtil.generateToken(uid.toString());
+        loginInfoDTO.setUname(userEntity.getUserName());
+        loginInfoDTO.setuId(uid);
+        loginInfoDTO.setJwt(this.jwtUtil.generateToken(uid.toString()));
+        return loginInfoDTO;
     }
 
 }

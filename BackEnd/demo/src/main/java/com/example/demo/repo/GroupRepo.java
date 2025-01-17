@@ -11,6 +11,6 @@ import java.util.List;
 public interface GroupRepo extends JpaRepository<GroupsEntity, Long> {
     public GroupsEntity findByGroupname(String groupName);
     public GroupsEntity findByGroupid(long groupid);
-    @Query(value = "SELECT Groupsentity.* FROM Groupsentity,members WHERE Groupsentity.groupid = members.groupid and members.memberid=?1", nativeQuery = true)
-    List<GroupsEntity> fetchGroups(long uid);
+    @Query(value = "SELECT Groupsentity.* FROM Groupsentity,members WHERE Groupsentity.groupid = members.groupid and members.memberid=?1 and Groupsentity.groupname like ?2", nativeQuery = true)
+    List<GroupsEntity> fetchGroups(long uid,String groupname);
 }

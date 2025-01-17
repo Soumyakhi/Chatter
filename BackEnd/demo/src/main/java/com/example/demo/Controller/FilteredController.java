@@ -101,9 +101,8 @@ public class FilteredController {
     }
     @Autowired
     FetchGroupsService fetchGroupsService;
-    @GetMapping("/fetchGroups")
-    public List<FetchGroupsDTO> fetchGroups(HttpServletRequest request){
-        return fetchGroupsService.fetchGroups(request);
+    @GetMapping("/fetchGroups/{query}")
+    public List<FetchGroupsDTO> fetchGroups(HttpServletRequest request,@PathVariable String query){
+        return fetchGroupsService.fetchGroups(request,query);
     }
-
 }

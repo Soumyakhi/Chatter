@@ -30,5 +30,4 @@ public class GroupsEntity {
     @ManyToOne
     @JoinColumn(name = "creatorid", referencedColumnName = "uid", nullable = false)
     private UserEntity creator;
-
 }

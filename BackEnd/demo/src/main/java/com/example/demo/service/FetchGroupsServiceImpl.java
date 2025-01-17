@@ -23,9 +23,9 @@ public class FetchGroupsServiceImpl implements FetchGroupsService {
     @Autowired
     TextRepo textRepo;
     @Override
-    public List<FetchGroupsDTO> fetchGroups(HttpServletRequest request) {
+    public List<FetchGroupsDTO> fetchGroups(HttpServletRequest request,String query) {
         long uid=jwtUtil.extractUserIdFromRequest(request);
-        List<GroupsEntity> groupsEntities=groupRepo.fetchGroups(uid);
+        List<GroupsEntity> groupsEntities=groupRepo.fetchGroups(uid,"%"+query.trim()+"%");
         List<FetchGroupsDTO> groups=new ArrayList<>();
         for(GroupsEntity groupsEntity:groupsEntities){
             FetchGroupsDTO fetchGroupsDTO=new FetchGroupsDTO();

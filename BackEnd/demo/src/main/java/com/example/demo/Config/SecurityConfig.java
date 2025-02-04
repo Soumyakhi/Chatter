@@ -1,6 +1,7 @@
 package com.example.demo.Config;
 
 import com.example.demo.security.JwtAuthenticationFilter;
+import com.example.demo.security.WsAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,19 +17,32 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter filter;
+    @Autowired
+    private WsAuthenticationFilter wsFilter;
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable()).cors(cors->{})
-                .authorizeHttpRequests(
-                    auth ->
-                            auth.requestMatchers("/index/**").authenticated().anyRequest().permitAll())
+        http.csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
 
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                // Define authorization rules for specific HTTP requests first
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/index/**").authenticated() // Secure HTTP paths
+                                .requestMatchers("/ws/**").authenticated()   // Secure WebSocket paths
+                                .anyRequest().permitAll()  // Allow all other HTTP requests
+                )
 
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                // Session management (stateless)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Add JWT filter before UsernamePasswordAuthenticationFilter for HTTP requests
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+
+                // Add WebSocket-specific filter
+                .addFilterBefore(wsFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }

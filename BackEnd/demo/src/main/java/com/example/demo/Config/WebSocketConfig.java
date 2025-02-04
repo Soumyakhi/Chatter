@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.Config;
 
 import com.example.demo.utils.CustomHandshakeInterceptor;
 import com.example.demo.utils.MyWebSocketHandler;
@@ -21,8 +21,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(myWebSocketHandler, "/index/ws/groups/{groupId}")
-                .addInterceptors(new CustomHandshakeInterceptor())
+        registry.addHandler(myWebSocketHandler, "/ws/groups/{groupId}/{jwt}")
+                //.addInterceptors(new CustomHandshakeInterceptor())
                     .setAllowedOrigins("*");
     }
 }

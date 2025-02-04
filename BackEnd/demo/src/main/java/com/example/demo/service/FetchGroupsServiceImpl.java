@@ -30,6 +30,7 @@ public class FetchGroupsServiceImpl implements FetchGroupsService {
         for(GroupsEntity groupsEntity:groupsEntities){
             FetchGroupsDTO fetchGroupsDTO=new FetchGroupsDTO();
             fetchGroupsDTO.setGroupName(groupsEntity.getGroupname());
+            fetchGroupsDTO.setGroupId(groupsEntity.getGroupid());
             TextEntity textEntity=textRepo.findTopByGroupsEntity_GroupidOrderByTidDesc(groupsEntity.getGroupid());
             if(textEntity==null){
                 fetchGroupsDTO.setText("");

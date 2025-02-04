@@ -4,7 +4,14 @@ public class FetchGroupsDTO {
     private String groupName;
     private String text;
     private long textId;
+    private long groupId;
+    public long getGroupId() {
+        return groupId;
+    }
 
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
     public String getGroupName() {
         return groupName;
     }

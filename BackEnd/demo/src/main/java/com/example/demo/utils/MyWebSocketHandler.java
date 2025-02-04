@@ -25,11 +25,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private CheckMemberService checkMemberService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        Long groupId = Long.valueOf(session.getUri().getPath().split("/")[4]);
-        Long userId = (Long) session.getAttributes().get("userId");
+        Long groupId = Long.valueOf(session.getUri().getPath().split("/")[3]);
+        Long userId = Long.parseLong(jwtUtil.extractUserId(session.getUri().getPath().split("/")[4]));
 
         if (isUserMemberOfGroup(userId, groupId)) {
             groupSessions.computeIfAbsent(groupId, k -> new HashSet<>()).add(session);
@@ -44,7 +46,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        Long groupId = Long.valueOf(session.getUri().getPath().split("/")[4]);
+        Long groupId = Long.valueOf(session.getUri().getPath().split("/")[3]);
         Set<WebSocketSession> groupSessionSet = groupSessions.getOrDefault(groupId, new HashSet<>());
         for (WebSocketSession s : groupSessionSet) {
             if (s.isOpen()) s.sendMessage(message);
@@ -53,7 +55,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        Long groupId = Long.valueOf(session.getUri().getPath().split("/")[4]);
+        Long groupId = Long.valueOf(session.getUri().getPath().split("/")[3]);
         Set<WebSocketSession> groupSessionSet = groupSessions.getOrDefault(groupId, new HashSet<>());
         groupSessionSet.remove(session);
         if (groupSessionSet.isEmpty()) groupSessions.remove(groupId);

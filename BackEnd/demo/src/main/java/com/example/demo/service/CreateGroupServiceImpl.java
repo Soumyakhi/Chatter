@@ -21,9 +21,9 @@ public class CreateGroupServiceImpl implements CreateGroupService {
     @Autowired
     private MemberRepo memberRepo;
     @Override
-    public boolean created(HttpServletRequest request, GroupsEntity groupsEntity){
+    public GroupsEntity created(HttpServletRequest request, GroupsEntity groupsEntity){
         if(groupRepo.findByGroupname(groupsEntity.getGroupname())!=null){
-            return  false;
+            return  null;
         }
         UserEntity userEntity=userRepo.findByUid(jwtUtil.extractUserIdFromRequest(request));
         groupsEntity.setCreator(userEntity);
@@ -32,7 +32,9 @@ public class CreateGroupServiceImpl implements CreateGroupService {
         memberEntity.setMember(userEntity);
         memberEntity.setGroupsEntity(groupsEntity);
         memberRepo.save(memberEntity);
-        return true;
+        GroupsEntity res=groupRepo.findByGroupname(groupsEntity.getGroupname());
+        res.setCreator(null);
+        return res;
     }
 
 }

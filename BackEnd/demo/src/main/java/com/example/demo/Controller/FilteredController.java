@@ -41,9 +41,9 @@ public class FilteredController {
     private CreateGroupService createGroupService;
     @PostMapping("/createGroup")
     public ResponseEntity<Object> createGroup(HttpServletRequest request,@RequestBody GroupsEntity groupsEntity){
-        boolean created= createGroupService.created(request, groupsEntity);
-        if(created){
-            return ResponseEntity.status(HttpStatus.OK).body("Group Created");
+        GroupsEntity group= createGroupService.created(request, groupsEntity);
+        if(group!=null){
+            return ResponseEntity.status(HttpStatus.OK).body(group);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Group already exists");
     }
@@ -70,7 +70,7 @@ public class FilteredController {
     @Autowired
     CheckMemberService checkMemberService;
     @GetMapping("/isMember/{uid}/{groupid}")
-    public ResponseEntity<Object> isCreator(@PathVariable long uid,@PathVariable long groupid){
+    public ResponseEntity<Object> isMember(@PathVariable long uid,@PathVariable long groupid){
         boolean isMember= checkMemberService.checkIfMember(uid, groupid);
         if(isMember){
             return ResponseEntity.status(HttpStatus.OK).body("true");
@@ -80,7 +80,7 @@ public class FilteredController {
     @Autowired
     SearchAddMemberService searchAddMemberService;
     @GetMapping("/searchNonMembers/{query}/{groupid}")
-    public Set<UserEntity> isCreator(@PathVariable String query, @PathVariable long groupid){
+    public Set<UserEntity> searchNonMembers(@PathVariable String query, @PathVariable long groupid){
         return searchAddMemberService.search(query,groupid);
     }
     @Autowired
@@ -104,5 +104,11 @@ public class FilteredController {
     @GetMapping("/fetchGroups/{query}")
     public List<FetchGroupsDTO> fetchGroups(HttpServletRequest request,@PathVariable String query){
         return fetchGroupsService.fetchGroups(request,query);
+    }
+    @Autowired
+    FetchMembersService fetchMembersService;
+    @GetMapping("/fetchMembers/{groupid}")
+    public List<MemberDTO> fetchMembers(HttpServletRequest request,@PathVariable long groupid){
+        return fetchMembersService.fetch(request,groupid);
     }
 }

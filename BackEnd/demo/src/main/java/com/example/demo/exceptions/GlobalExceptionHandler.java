@@ -13,6 +13,7 @@ import org.springframework.web.client.HttpClientErrorException;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGlobalException(Exception ex) {
+        System.out.println(ex);
         return new ResponseEntity<>("An unexpected error occurred: " , HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @ExceptionHandler(BadCredentialsException.class)

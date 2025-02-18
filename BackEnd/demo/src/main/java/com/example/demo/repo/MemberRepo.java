@@ -12,4 +12,5 @@ import java.util.List;
 public interface MemberRepo extends JpaRepository<MemberEntity, Long> {
     List<MemberEntity> findByGroupsEntity_Groupid(Long groupid);
     MemberEntity findByMemberAndGroupsEntity(UserEntity member, GroupsEntity groupsEntity);
+
 }

@@ -4,6 +4,10 @@ public class MemberDTO {
     private Long uid;
     private Long groupid;
 
+
+
+    private String uname;
+
     public Long getUid() {
         return uid;
     }
@@ -18,5 +22,12 @@ public class MemberDTO {
 
     public void setGroupid(Long groupid) {
         this.groupid = groupid;
+    }
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
     }
 }
